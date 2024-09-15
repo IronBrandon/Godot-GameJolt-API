@@ -95,9 +95,7 @@ For details on all methods, read the custom docs by pressing F1 and typing GameJ
 ## **Latest Documentation**
 _this section is incomplete_
 
-Any missing methods are untested, if you find any issues please report them.
-
-*Untested in Godot 4.
+Any methods without a description are untested, if you find any issues please report them.
   
 ### Properties (_variables_)
 
@@ -126,6 +124,8 @@ Any missing methods are untested, if you find any issues please report them.
   The currently active GameJolt request.
   
 ### Methods (_functions_)
+
+*Untested in Godot 4.
 
 - *`time_fetch() -> void`\
   Fetches the current time.
