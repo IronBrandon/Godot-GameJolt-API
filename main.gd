@@ -1,15 +1,32 @@
-extends HTTPRequest
+@icon("res://addons/gamejolt_api/gj_icon.png")
+class_name GameJoltAPI extends HTTPRequest
 
-# Original Godot GameJolt plugin by Ackens
-#	: https://github.com/ackens/-godot-gj-api
-#	: Original index page https://gamejolt.com/game-api/doc
-# Convert to Godot 4.x created by IrønBrandon
+# | Credits |
+	# Original Godot GameJolt API created by Ackens
+	# : https://github.com/ackens/-godot-gj-api
+	#
+	# Godot 4 GameJolt API created by IrønBrandon
+	# : https://github.com/IronBrandon/Godot-GameJolt-API
+
+# Please view the cleaner documentation by pressing F1 and typing 'GameJolt'.
+
+## A simple GameJolt API node.
+## 
+## Any methods without a description are untested, if you find any issues please
+## report them in the second GitHub repository below.
+## [br][br]
+## [url=https://github.com/ackens/-godot-gj-api]Godot 3 GameJolt plugin[/url] by Ackens.
+## [br]
+## [url=https://github.com/IronBrandon/Godot-GameJolt-API]Godot 4 GameJolt plugin[/url] by IrønBrandon.
+##
+## @tutorial: https://github.com/ackens/-godot-gj-api#Methods-description
 
 signal gamejolt_request_completed(type,message)
 
 const BASE_GAMEJOLT_API_URL = 'https://api.gamejolt.com/api/game/v1_2'
 
-@export var private_key: String
+@export_category("Right-Click above to see documentation")
+@export var private_key: String ## Your game's private key. 
 @export var game_id: String
 @export var auto_batch: bool = true #Merge queued requests in one batch
 @export var verbose: bool = false
@@ -117,17 +134,9 @@ func init(pk:String,gi:String):
 
 #region USERS
 
-func get_username():
-	return username_cache
-	pass
-	
-func get_user_token():
-	return token_cache
-	pass
-
+## Attempts to automatically authenticate the user with the URL in Web exports.
+## [br]When debugging, you can add this to the URL:  [code]?gjapi_username=<yourusername>&gjapi_token=<yourtoken>[/code][br][br]
 func auto_auth():
-	#get username and token form url on gamejolt (only work with html5)
-	#For Godot debugging, add this in your url : ?gjapi_username=<yourusername>&gjapi_token=<yourtoken>
 	JavaScriptBridge.eval('var urlParams = new URLSearchParams(window.location.search);',true)
 	var tmp = JavaScriptBridge.eval('urlParams.get("gjapi_username")', true)
 	if tmp is String:
@@ -137,20 +146,17 @@ func auto_auth():
 			token_cache = tmp
 			_call_gj_api('/users/auth/', {user_token = token_cache, username = username_cache})
 
-func auth_user(username:String, token:String):
+## Attempts to authenticate a user with the given [param username] and [param token].
+func auth_user(username:String, token:String) -> void:
 	_call_gj_api('/users/auth/', {user_token = token, username = username})
 	username_cache = username
 	token_cache = token
-	pass
 
-func fetch_user(username=null, id:int=0):
+func fetch_user(username=null, id:int=0) -> void:
 	_call_gj_api('/users/', {username = username, user_id = id})
-	pass
 
 func fetch_friends():
-	_call_gj_api('/friends/',
-		{username = username_cache, user_token = token_cache})
-	pass
+	_call_gj_api('/friends/', {username = username_cache, user_token = token_cache})
 
 #endregion
 
