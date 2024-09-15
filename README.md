@@ -17,14 +17,14 @@ Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj
 1. Click "Code" and then "Download ZIP".
 2. Drag and drop the "Godot-GameJolt-API" folder into your project's addons folder.
     - You do not need the files '.gitattributes' or 'README.md'. All the other files are required.
-4. I highly recomment renaming the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api".
-5. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
+3. Rename the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api" to follow Godot's naming conventions.
+4. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
+5. Lastly save your project and click **Project > Reload Current Project**.
 
 And it's installed!
 
 ## **How To Use**
-
-**_this section is incomplete_**
+_this section is incomplete_
 
 To add the GameJoltAPI node, select "Add Child Node" and add the GameJoltAPI to your main scene or
 under an Autoload scene (_if you have multiple scenes_).
@@ -39,13 +39,50 @@ Now you can call GameJoltAPI methods through a parent node or an extended script
 If your game is going to be distributed as a Web build, you can execute the method `user_auto_auth()`
 which will retrieve the player's username and token via the URL.\
 When debugging, add _`?gjapi_username=<username>&gjapi_token=<token>`_ to the URL (_replace
-<username> and <token> with your username and token_).
+\<username\> and \<token\> with your username and token_).
 
 However, if you're distributing it as a program (_or want a manual option_), you can instead use
 `user_auth(username, token)` to authenticate the user. Just create a simple "log-in" menu and
 have the player enter their username and token.
 
+Next, you can connect the `gamejolt_request_completed` signal to a node. Do this either through the
+editor or the code. Here is some example code:
+
+```gdscript
+# In the below example, the GameJoltAPI node is a child of this node.
+
+var user_authenticated: bool = false
+
+@onready var gamejolt_api: GameJoltAPI = get_node("GameJoltAPI")
+@onready var username_box: LineEdit = get_node("username_box")
+@onready var token_box: LineEdit = get_node("token_box")
+@onready var login_button: Button = get_node("login_button")
+
+func _ready(): # Connect the signals to the methods in ready.
+    login_button.pressed.connect(_on_login_pressed)
+    gamejolt_api.gamejolt_request_completed.connect(_on_gamejolt_request_completed)
+
+func _on_login_pressed():
+    gamejolt_api.auth_user(username_box.text, token_box.text)
+    login_button.disabled = true
+
+func _on_gamejolt_request_completed(request_type, response):
+    match request_type:
+        '/users/auth/':
+            user_authenticated = response['success']
+            if user_authenticated:
+                pass # Add code for when the user is authenticated.
+            else:
+                pass # Add code for when the user fails to authenticate.
+            login_button.disabled = false
+        # Use a match statement so you can add more request_types later
+```
+
 ### Unlock Trophies
+
+. . .
+
+### Fetch Any Data
 
 . . .
 
@@ -56,8 +93,7 @@ For details on all methods, read the custom docs by pressing F1 and typing GameJ
 (_you can also read the online documentation below_)
 
 ## **Latest Documentation**
-
-**_this section is incomplete_**
+_this section is incomplete_
 
 Any missing methods are untested, if you find any issues please report them.
 
