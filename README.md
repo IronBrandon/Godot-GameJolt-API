@@ -7,15 +7,19 @@ A simple GameJolt API plugin for Godot 4.
 3. (_optional_) Rename the folder "Godot-GameJolt-API" to "gamejolt_api".
 4. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
 
-Now, you can add the custom node GameJoltAPI to your main scene or as a singleton.
+Now, you can add the custom node _GameJoltAPI_ to your main scene or as a singleton.
 
 ## Getting Started
 
-For extra detail on all methods, read the custom docs by pressing F1 and typing GameJolt!
+**_this section is incomplete_**
+
+For details on all methods, read the custom docs by pressing F1 and typing GameJolt!
 
 (_you can also read the online documentation below_)
 
 ## Latest Documentation
+
+**_this section is incomplete_**
 
 Any missing methods are untested, if you find any issues please report them.
 
