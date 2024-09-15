@@ -9,8 +9,9 @@ A simple GameJolt API plugin for Godot 4.
 
 1. Click "Code" and then "Download ZIP".
 2. Drag and drop the "Godot-GameJolt-API" folder into your project's addons folder.
-3. I highly suggest renaming the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api".
-4. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
+    - You do not need the files '.gitattributes' or 'README.md'. All the other files are required.
+4. I highly recomment renaming the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api".
+5. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
 
 And it's installed!
 
