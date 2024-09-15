@@ -20,12 +20,8 @@ For extra detail on all methods, read the custom docs by pressing F1 and typing 
 Any missing methods are untested, if you find any issues please report them.
 
 *Untested in Godot 4.
-
-<span style="color: blue;">
   
 ### Properties (_variables_)
-
-</span>
 
 **Export variables**
 
@@ -50,12 +46,8 @@ Any missing methods are untested, if you find any issues please report them.
   The current queue of **Request**s.
 - **current_request**: Request\
   The currently active GameJolt request.
-
-<span style="color: blue;">
   
 ### Methods (_functions_)
-
-</span>
 
 - **\*user_auto_auth() _-> void_**\
   Attempts to automatically authenticate the user with the URL in Web exports.\
