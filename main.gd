@@ -1,5 +1,5 @@
 @icon("gj_icon.png")
-extends HTTPRequest
+class_name GameJoltAPI extends HTTPRequest
 
 # | Credits |
 	# Original Godot GJ API created by Ackens
@@ -133,6 +133,17 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, response_
 
 func _verbose(message) -> void:
 	if verbose: print('[GAMEJOLT] ' , message)
+
+
+func time_fetch(): _call_gj_api('/time/',{}) ## Fetches the current time.
+
+func batch_request(requests: Array[Request], parallel: bool = true, break_on_error: bool = false):
+	var requests_url:Array = []
+	var sub_types:Array = []
+	for request in requests:
+		sub_types.push_back(request.type)
+		requests_url.push_back(_compose_url(request.type, request.parameters,true))
+	_call_gj_api('/batch/',{requests = requests, parallel = parallel, break_on_error = break_on_error}, sub_types)
 
 #region USERS
 
@@ -274,20 +285,4 @@ func data_fetch_keys(pattern=null, global=true):
 	else:
 		_call_gj_api('/data-store/get-keys/',
 			{username = username_cache, user_token = token_cache, pattern = pattern})
-#endregion
-
-#region TIME
-
-func time_fetch(): _call_gj_api('/time/',{}) ## Fetches the current time.
-#endregion
-
-#region BATCH
-
-func batch_request(requests: Array, parallel: bool = true, break_on_error: bool = false):
-	var requests_url:Array = []
-	var sub_types:Array = []
-	for request in requests:
-		sub_types.push_back(request.type)
-		requests_url.push_back(_compose_url(request.type, request.parameters,true))
-	_call_gj_api('/batch/',{requests = requests, parallel = parallel, break_on_error = break_on_error}, sub_types)
 #endregion
