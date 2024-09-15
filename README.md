@@ -1,9 +1,16 @@
-A simple GameJolt API plugin for Godot 4.
+A simple GameJolt API plugin for Godot 4.\
+The same GameJolt API used in IrønBrandon's [Home Grown](https://ironbrandon.itch.io/homegrown) (_beta and full release_).
 
-### New Features
+Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj-api)
 
+## Introduction
+
+### Features
+
+- Verbose mode with detailed comments
 - Full offline code documentation in the form of Godot's custom docs
-- Code regions to easily review the plugin's code.
+- Code regions to easily review the plugin's code
+- Refactored to fit with Godot 4(_.3_)+
 
 ### Installation
 
@@ -84,44 +91,49 @@ Any missing methods are untested, if you find any issues please report them.
   
 ### Methods (_functions_)
 
+- *`time_fetch() -> void`\
+  Fetches the current time.
+- *`batch_request(requests: Array[Request], parallel: bool = true, break_on_error: bool = false) -> void`\
+  Calls a batch of **Request**s.
+
 **USERS**
 
-- **\*user_auto_auth() _-> void_**\
+- *`user_auto_auth() -> void`\
   Attempts to automatically authenticate the user with the URL in Web exports.\
   When debugging, you can add this to the URL:  ?gjapi_username=<yourusername>&gjapi_token=<yourtoken>\
   Request type is "/users/auth/"
-- **\*user_auth(`username`: String, `token`: String) _-> void_**\
+- *`user_auth(username: String, token: String) -> void`\
   Attempts to authenticate a user with the given `username` and `token`.\
   Request type is "/users/auth/"
-- **\*user_fetch(`username`: String, `id`: int = 0) _-> void_**\
+- *`user_fetch(username: String, id: int = 0) -> void`\
   Fetch's the data of either the `username` or user `id`.\
   Request type is "/users/"
-- **\*user_friends_fetch() _-> void_**\
+- *`user_friends_fetch() -> void`\
   Fetch's the currently cached user's friends list.\
   Request type is "/friends/"
 
 **SESSIONS**
 
-- **\*session_open() _-> void_**\
+- *`session_open() -> void`\
   Opens a session.\
   Request type is "/sessions/open/"
-- **\*session_ping() _-> void_**\
+- *`session_ping() -> void`\
   Pings an active session.\
   Request type is "/sessions/ping/"
-- **\*session_close() _-> void_**
+- *`session_close() -> void`
   Closes the active session.\
    Request type is "/sessions/close/"
-- **\*session_check() _-> void_**\
+- *`session_check() -> void`\
   Checks for an active session.\
    Request type is "/sessions/check/"
 
 **SCORES**
 
-- **\*scores_fetch(table_id = null, limit = null, better_than = null, worse_than = null)**
-- **\*scores_fetch_guest(guest, limit = null, table_id = null, better_than = null, worse_than = null)**
-- **\*scores_fetch_global(limit = null, table_id = null, better_than = null, worse_than = null)**
-- **\*scores_add(score, sort, guest: String = "", table_id = null)**
-- **\*scores_add_guest(score, sort, guest, table_id = null)**
+- *`scores_fetch(table_id = null, limit = null, better_than = null, worse_than = null) -> void`
+- *`scores_fetch_guest(guest, limit = null, table_id = null, better_than = null, worse_than = null) -> void`
+- *`scores_fetch_global(limit = null, table_id = null, better_than = null, worse_than = null) -> void`
+- *`scores_add(score, sort, guest: String = "", table_id = null) -> void`
+- *`scores_add_guest(score, sort, guest, table_id = null) -> void`
   - **Deprecated**: Add a guest name in **`scores_add()`** instead.
-- **\*scores_fetch_rank(sort, table_id = null)**
-- **\*scores_fetch_tables()**
+- *`scores_fetch_rank(sort, table_id = null) -> void`
+- *`scores_fetch_tables() -> void`
