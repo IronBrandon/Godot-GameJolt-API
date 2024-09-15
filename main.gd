@@ -2,11 +2,9 @@
 extends HTTPRequest
 
 # | Credits |
-	# Original Godot GameJolt API created by Ackens
-	# : https://github.com/ackens/-godot-gj-api
-	#
-	# Previous Godot GameJolt API created by rojekabc
-	# : https://github.com/rojekabc/-godot-gj-api
+	# Original Godot GJ API created by Ackens
+	# Forked from Deakcor's Godot GJ API
+	# : https://github.com/deakcor/-godot-gj-api
 	#
 	# Ported to Godot 4.x by IrønBrandon
 	# : https://github.com/IronBrandon/Godot-GameJolt-API
@@ -15,6 +13,8 @@ extends HTTPRequest
 # or right-click "GameJoltAPI" in the node's inspector and select "Open Documentation".
 
 ## A simple GameJolt API node.
+## 
+## Credits: Ackens, Piotr Rojewski, Deakcor, and IrønBrandon.[br][br]
 ## 
 ## Also look at the [b]" ... main.gd".Request[/b] class.[br][br]
 ## 
@@ -27,8 +27,6 @@ extends HTTPRequest
 ## 
 ## @tutorial(Online Docs): https://github.com/IronBrandon/Godot-GameJolt-API#Latest-Documentation
 ## @tutorial(Official GameJolt API Docs): https://gamejolt.com/game-api/doc
-## 
-## @tutorial(Original API Documentation by Ackens): https://github.com/ackens/-godot-gj-api#Methods-description
 
 ## Emits after a request to GameJolt has completed.
 ## [br][br][param message] should follow the format [code]{"success": true, . . .}[/code]
@@ -136,10 +134,6 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, response_
 func _verbose(message) -> void:
 	if verbose: print('[GAMEJOLT] ' , message)
 
-## This is useful for if you want to create a file that contains the game's private key and load that.
-func game_init(new_private_key: String, new_game_id: String = game_id) -> void:
-	private_key = new_private_key; game_id = new_game_id
-
 #region USERS
 
 ## Attempts to automatically authenticate the user with the URL in Web exports.
@@ -179,7 +173,7 @@ func session_ping(): ## Pings an active session.[br][br]Request type is "/sessio
 	_call_gj_api('/sessions/ping/',
 		{username = username_cache, user_token = token_cache})
 
-func session_close(): ## Closes the active sessions.[br][br]Request type is "/sessions/close/"
+func session_close(): ## Closes the active session.[br][br]Request type is "/sessions/close/"
 	_call_gj_api('/sessions/close/',
 		{username = username_cache, user_token = token_cache})
 
