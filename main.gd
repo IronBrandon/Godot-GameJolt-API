@@ -7,7 +7,7 @@ class_name GameJoltAPI extends HTTPRequest
 	# : https://github.com/deakcor/-godot-gj-api
 	#
 	# Ported to Godot 4.x by IrønBrandon
-	# : https://github.com/IronBrandon/Godot-GameJolt-API
+	# : https://github.com/IronBrandon/Godot-GameJolt-API/
 
 # NOTE: Please view the cleaner documentation by pressing F1 and typing 'GameJolt'.
 # or right-click "GameJoltAPI" in the node's inspector and select "Open Documentation".
@@ -23,10 +23,10 @@ class_name GameJoltAPI extends HTTPRequest
 ## [br][br]
 ## [url=https://github.com/ackens/-godot-gj-api]Godot 3 GameJolt plugin[/url] by Ackens.
 ## [br]
-## [url=https://github.com/IronBrandon/Godot-GameJolt-API]Godot 4 GameJolt plugin[/url] by IrønBrandon.
+## [url=https://github.com/IronBrandon/Godot-GameJolt-API/]Godot 4 GameJolt plugin[/url] by IrønBrandon.
 ## 
-## @tutorial(Godot GameJolt API Docs): https://github.com/IronBrandon/Godot-GameJolt-API#Latest-Documentation
-## @tutorial(Official GameJolt Docs): https://gamejolt.com/game-api/doc
+## @tutorial(Godot GameJolt API Docs): https://github.com/IronBrandon/Godot-GameJolt-API/wiki
+## @tutorial(Official GameJolt Docs): https://gamejolt.com/game-api/doc/
 
 ## Emits after a request to GameJolt has completed.
 ## [br][br][param message] should follow the format [code]{"success": true, . . .}[/code]
