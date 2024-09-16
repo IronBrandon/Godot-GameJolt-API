@@ -101,38 +101,38 @@ Any methods without a description are untested, if you find any issues please re
 
 **Export variables**
 
-- **private_key**: String
+- **`private_key`**`: String`
 
 Your game's private key.
 
-- **game_id**: String
+- **`game_id`**`: String`
 
 Your game's ID. This is public, just look at your game's URL and copy the numbers.
 
-- **auto_batch**: bool = true
+- **`auto_batch`**`: bool = true`
 
 Merge queued requests in one batch.
 
-- **auto_auth_in_ready**: bool = false
+- **`auto_auth_in_ready`**`: bool = false`
 
-Automatically calls the `user_auto_auth` method during ready.
+Automatically calls the `user_auto_auth()` method during ready.
 
-- **verbose**: bool = false
+- **`verbose`**`: bool = false`
 
 Causes funtions to print detailed text.
 
 
 **Public variables**
 
-- **busy**: bool
+- **`busy`**`: bool`
 
 If true the GameJoltAPI is currently busy with a GJ call.
 
-- **queue**: Array[Request]
+- **`queue`**`: Array[Request]`
 
 The current queue of **Request**s.
 
-- **current_request**: Request
+- **`current_request`**`: Request`
 
 The currently active GameJolt request.
   
