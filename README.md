@@ -102,66 +102,66 @@ Any methods without a description are untested, if you find any issues please re
 **Export variables**
 
 - **private_key**: String\
-  Your game's private key. If your project is open-source on GitHub, you can enter a path to a file and add that file to your .gitignore
+    Your game's private key. If your project is open-source on GitHub, you can enter a path to a file and add that file to your .gitignore
 - **game_id**: String\
-  Your game's ID. This is public, just look at your game's URL and copy the numbers.
+    Your game's ID. This is public, just look at your game's URL and copy the numbers.
 - **auto_batch**: bool\
-  Merge queued requests in one batch.
+    Merge queued requests in one batch.
 - **verbose**: bool\
-  Prints more text.
+    Prints more text.
 
 **Public variables**
 
-- **username_cache**: String\
-  The currently cached username
-- **token_cache**: String\
-  The currently cached token
 - **busy**: String\
-  If true the GameJoltAPI is currently busy with a GJ call.
+    If true the GameJoltAPI is currently busy with a GJ call.
 - **queue**: Array[Request]\
-  The current queue of **Request**s.
+    The current queue of **Request**s.
 - **current_request**: Request\
-  The currently active GameJolt request.
+    The currently active GameJolt request.
   
 ### Methods (_functions_)
 
 *Untested in Godot 4.
 
-- *`time_fetch() -> void`\
-  Fetches the current time.
+- `get_username() -> String`\
+    Returns the username cache.
+- `get_token() -> String`\
+    Returns the user token cache.
+- `time_fetch() -> void`\
+    Fetches the current time.
 - *`batch_request(requests: Array[Request], parallel: bool = true, break_on_error: bool = false) -> void`\
-  Calls a batch of **Request**s.
+    Calls a batch of **Request**s.
 
 **USERS**
 
 - *`user_auto_auth() -> void`\
-  Attempts to automatically authenticate the user with the URL in Web exports.\
-  When debugging, you can add this to the URL:  ?gjapi_username=<yourusername>&gjapi_token=<yourtoken>\
-  Request type is "/users/auth/"
+    Attempts to automatically authenticate the user with the URL in Web exports.\
+    When debugging, you can add this to the URL:  ?gjapi_username=<yourusername>&gjapi_token=<yourtoken>\
+    Request type is "/users/auth/"
 - *`user_auth(username: String, token: String) -> void`\
-  Attempts to authenticate a user with the given `username` and `token`.\
-  Request type is "/users/auth/"
+    Attempts to authenticate a user with the given `username` and `token`.\
+    Request type is "/users/auth/"
 - *`user_fetch(username: String, id: int = 0) -> void`\
-  Fetch's the data of either the `username` or user `id`.\
-  Request type is "/users/"
+    Fetch's the data of either the `username` or user `id`.\
+    Request type is "/users/"
 - *`user_friends_fetch() -> void`\
-  Fetch's the currently cached user's friends list.\
-  Request type is "/friends/"
+    Fetch's the currently cached user's friends list.\
+    Request type is "/friends/"
 
 **SESSIONS**
 
 - *`session_open() -> void`\
-  Opens a session.\
-  Request type is "/sessions/open/"
+    Opens a session.\
+    Request type is "/sessions/open/"
 - *`session_ping() -> void`\
-  Pings an active session.\
-  Request type is "/sessions/ping/"
+    Pings an active session.\
+    Request type is "/sessions/ping/"
 - *`session_close() -> void`
-  Closes the active session.\
-   Request type is "/sessions/close/"
+    Closes the active session.\
+    Request type is "/sessions/close/"
 - *`session_check() -> void`\
-  Checks for an active session.\
-   Request type is "/sessions/check/"
+    Checks for an active session.\
+    Request type is "/sessions/check/"
 
 **SCORES**
 
