@@ -58,15 +58,15 @@ var user_authenticated: bool = false
 @onready var token_box: LineEdit = get_node("token_box")
 @onready var login_button: Button = get_node("login_button")
 
-func _ready(): # Connect the signals to the methods in ready.
+func _ready() -> void: # Connect the signals to the methods in ready.
     login_button.pressed.connect(_on_login_pressed)
     gamejolt_api.gamejolt_request_completed.connect(_on_gamejolt_request_completed)
 
-func _on_login_pressed():
-    gamejolt_api.auth_user(username_box.text, token_box.text)
+func _on_login_pressed() -> void:
+    gamejolt_api.user_auth(username_box.text, token_box.text)
     login_button.disabled = true
 
-func _on_gamejolt_request_completed(request_type, response):
+func _on_gamejolt_request_completed(request_type, response) -> void:
     match request_type:
         '/users/auth/':
             user_authenticated = response['success']

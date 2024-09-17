@@ -96,12 +96,11 @@ func _compose_param(parameter, key: String) -> String:
 	parameter = str(parameter)
 	if parameter.is_empty():
 		return ""
-	return '&' + key + '=' + parameter.percent_encode()
+	return '&' + key + '=' + parameter.uri_encode()
 
 func _compose_url(url_path:String, parameters:Dictionary={}, sub_request := false) -> String:
 	var final_url:String = ("" if sub_request else BASE_GAMEJOLT_API_URL) + url_path
 	final_url += '?game_id=' + str(game_id)
-
 	for key in parameters.keys():
 		var parameter = parameters[key]
 		if parameter == null:
