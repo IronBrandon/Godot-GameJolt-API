@@ -5,6 +5,8 @@ Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj
 
 ## Introduction
 
+**Plugin Version**: 0.1
+
 ### Features
 
 - Verbose mode with detailed comments
@@ -34,7 +36,7 @@ Next, set the export variables `Private Key` and `Game ID` to your game's privat
 
 Now you can call GameJoltAPI methods through a parent node or an extended script!
 
-### Authenticate User
+### Authenticating Users
 
 If your game is going to be distributed as a Web build, you can execute the method `user_auto_auth()`
 which will retrieve the player's username and token via the URL.\
@@ -78,11 +80,11 @@ func _on_gamejolt_request_completed(request_type, response) -> void:
         # Use a match statement so you can add more request_types later
 ```
 
-### Unlock Trophies
+### Unlocking Trophies
 
 . . .
 
-### Fetch Any Data
+### Fetching Any Data
 
 . . .
 

@@ -19,14 +19,14 @@ class_name GameJoltAPI extends HTTPRequest
 ## Also look at the [GameJoltAPI.Request] class.[br][br]
 ## 
 ## Any methods without a description are untested, if you find any issues please
-## report them in the second GitHub repository below.
-## [br][br]
-## [url=https://github.com/ackens/-godot-gj-api]Godot 3 GameJolt plugin[/url] by Ackens.
-## [br]
-## [url=https://github.com/IronBrandon/Godot-GameJolt-API/]Godot 4 GameJolt plugin[/url] by IrønBrandon.
+## report them in the GitHub repository.[br][br]
+##
+## [url=https://github.com/IronBrandon/Godot-GameJolt-API/wiki]GitHub Wiki[/url][br]
+## [url=https://gamejolt.com/game-api/doc]Official Game API Docs[/url]
 ## 
-## @tutorial(Godot GameJolt API Docs): https://github.com/IronBrandon/Godot-GameJolt-API/wiki
-## @tutorial(Official GameJolt Docs): https://gamejolt.com/game-api/doc/
+## @tutorial(Authenticating Users): https://github.com/IronBrandon/Godot-GameJolt-API#authenticating-users
+## @tutorial(Unlocking Trophies): https://github.com/IronBrandon/Godot-GameJolt-API#unlocking-trophies
+## @tutorial(Fetching Any Data): https://github.com/IronBrandon/Godot-GameJolt-API#fetching-any-data
 
 ## Emits after a request to GameJolt has completed.
 ## [br][br][param message] should follow the format [code]{"success": true, . . .}[/code]
