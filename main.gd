@@ -9,8 +9,9 @@ class_name GameJoltAPI extends HTTPRequest
 	# Ported to Godot 4.x by IrønBrandon
 	# : https://github.com/IronBrandon/Godot-GameJolt-API/
 
-# NOTE: Please view the cleaner documentation by pressing F1 and typing 'GameJolt'.
+# NOTE: Please view the cleaner documentation by pressing F1 and typing 'GameJoltAPI'
 # or right-click "GameJoltAPI" in the node's inspector and select "Open Documentation".
+# If you don't see the GameJoltAPI as its own class, save and reload your project.
 
 ## A simple GameJolt API node.
 ## 
@@ -20,16 +21,16 @@ class_name GameJoltAPI extends HTTPRequest
 ## 
 ## Any methods without a description are untested, if you find any issues please
 ## report them in the GitHub repository.[br][br]
-##
+## 
 ## [url=https://github.com/IronBrandon/Godot-GameJolt-API/wiki]GitHub Wiki[/url][br]
-## [url=https://gamejolt.com/game-api/doc]Official Game API Docs[/url]
+## Look at the [url=https://gamejolt.com/game-api/doc]Official Game API Docs[/url] for more information
 ## 
 ## @tutorial(Authenticating Users): https://github.com/IronBrandon/Godot-GameJolt-API#authenticating-users
 ## @tutorial(Unlocking Trophies): https://github.com/IronBrandon/Godot-GameJolt-API#unlocking-trophies
 ## @tutorial(Fetching Any Data): https://github.com/IronBrandon/Godot-GameJolt-API#fetching-any-data
 
 ## Emits after a request to GameJolt has completed.
-## [br][br][param message] should follow the format [code]{"success": true, . . .}[/code]
+## [br][br][param message] will follow the format [code]{"success": true/false, . . .}[/code]
 ## [br][param type] is will be one of the request types, such as "/users/auth/", "/users/", "/trophies/", "/sessions/check/", "/sessions/open/", etc.
 signal gamejolt_request_completed(type: String, message: Dictionary)
 
@@ -38,13 +39,19 @@ const BASE_GAMEJOLT_API_URL = 'https://api.gamejolt.com/api/game/v1_2'
 @export_category("Right-Click 'GameJoltAPI' to see documentation")
 @export var private_key: String ## Your game's private key.
 @export var game_id: String ## Your game's ID. This is public, just look at your game's URL and copy the numbers.
-@export var auto_batch: bool = true ## Merge queued requests in one batch.
+## Optional path to a JSON file containing your game's private_key and game_id. Format:
+## [codeblock]{"private_key":"<gamekey>","game_id":"<gameid>"}[/codeblock] Useful for open-source games, just add the file to your '.gitignore'.[br][br]
+## If you want to make it extra secure, you can also add a [param "trophies"] key with either an Array of trophy IDs.[br]
+## Look at [member detected_trophies] for more info.
+@export_file("*.json") var data_path: String
+@export var auto_batch: bool = true ## Merge queued requests in one batch request.
 @export var auto_auth_in_ready: bool = false ## Automatically calls the [method user_auto_auth] method during ready.
 @export var verbose: bool = false ## Causes funtions to print detailed text.
 
 var _username_cache: String
 var _user_token_cache: String
-var busy: bool ## If true the GameJoltAPI is currently busy with a GJ call.
+var _busy: bool
+var trophy_ids: PackedInt32Array ## Contains trophies loaded from the JSON file at [member data_path].
 var queue: Array[Request] = [] ## The current queue of [param Request]s.
 var current_request: Request ## The currently active GameJolt request.
 
@@ -63,6 +70,16 @@ func _init() -> void:
 	request_completed.connect(_on_HTTPRequest_request_completed)
 
 func _ready() -> void:
+	if !data_path.is_empty():
+		var file = ResourceLoader.load(data_path)
+		if file is JSON:
+			var data = file.data
+			if data is Dictionary:
+				private_key = data.get("private_key", private_key)
+				game_id = data.get("game_id", game_id)
+				if data.has("trophies"): for trophy in data["trophies"]:
+					trophy_ids.append(trophy)
+		else: push_warning('[GAMEJOLT] Key Path should lead to a .json file with "private_key" and "game_id" as keys')
 	if auto_auth_in_ready:
 		user_auto_auth()
 
@@ -72,7 +89,7 @@ func _call_gj_api(type: String, parameters: Dictionary = {}, sub_types: Array = 
 		parameters["username"] = parameters.get("username", _username_cache)
 		parameters["user_token"] = parameters.get("user_token", _user_token_cache)
 	else: parameters.erase("username"); parameters.erase("user_token")
-	if busy:
+	if _busy:
 		request_error = ERR_BUSY
 		if auto_batch and type != '/batch/':
 			var url: String = _compose_url(type, parameters, true)
@@ -84,12 +101,12 @@ func _call_gj_api(type: String, parameters: Dictionary = {}, sub_types: Array = 
 		else:
 			queue.push_back(Request.new(type,parameters,sub_types))
 		return
-	busy = true
+	_busy = true
 	var url: String = _compose_url(type, parameters)
 	current_request = Request.new(type,parameters,sub_types)
 	request_error = request(url)
 	if request_error != OK:
-		busy = false
+		_busy = false
 	pass
 
 func _compose_param(parameter, key: String) -> String:
@@ -114,8 +131,7 @@ func _compose_url(url_path:String, parameters:Dictionary={}, sub_request := fals
 	var signature:String = final_url + private_key
 	signature = signature.md5_text()
 	final_url += '&signature=' + signature
-	if verbose:
-		_verbose(final_url)
+	_verbose("Composed URL: "+final_url)
 	return final_url
 
 func _on_HTTPRequest_request_completed(result, response_code, headers, response_body) -> void:
@@ -124,9 +140,9 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, response_
 	else:
 		var body:String = response_body.get_string_from_utf8()
 		# Prepare for json parsing
-		body = body.replace("\"true\"","true")
-		body = body.replace("\"false\"","false")
-		if verbose: _verbose(body)
+		body = body.replace('"true"',"true")
+		body = body.replace('"false"',"false")
+		_verbose("Received: "+body)
 		var json_result = JSON.parse_string(body)
 		var response:Dictionary = {'success': false}
 		if json_result:
@@ -136,15 +152,15 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, response_
 			for k in response["responses"].size():
 				if current_request.sub_types.size()>k:
 					emit_signal('gamejolt_request_completed',current_request.sub_types[k],response["responses"][k])
-	busy = false
+	_busy = false
 	if !queue.is_empty():
 		var request_queued: Request = queue.pop_front()
 		_call_gj_api(request_queued.type, request_queued.parameters, request_queued.sub_types)
 
-func _verbose(message) -> void:
-	if verbose: print('[GAMEJOLT] ' , message)
+func _verbose(message: Variant) -> void:
+	if verbose: print('[GAMEJOLT] ',message)
 
-
+func is_busy() -> bool: return _busy ## Returns true if the API is busy.
 func get_username() -> String: return _username_cache ## Returns the username cache.
 func get_token() -> String: return _user_token_cache ## Returns the user token cache.
 func time_fetch(): _call_gj_api('/time/',{}) ## Fetches the current time.
@@ -175,7 +191,7 @@ func user_auth(username: String, token: String) -> void:
 	_username_cache = username; _user_token_cache = token;
 	_call_gj_api('/users/auth/')
 
-func user_fetch(username: String, id: int=0) -> void: ## Fetches the data of either the [param username] or user [param id] data.[br][br]Request type is "/users/"
+func user_fetch(username: String, id: int = 0) -> void: ## Fetches the info of the [param username] or user [param id] data.[br][br]Request type is "/users/"
 	_call_gj_api('/users/', {username = username, user_id = id})
 
 func user_friends_fetch() -> void: ## Fetches the currently cached user's friends list. [br][br]Request type is "/friends/"
@@ -183,39 +199,38 @@ func user_friends_fetch() -> void: ## Fetches the currently cached user's friend
 #endregion
 
 #region SESSIONS
-func session_open(): ## Opens a session. [br][br]Request type is "/sessions/open/"
+func session_open(): ## Opens a session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/open/"
 	_call_gj_api('/sessions/open/')
 
-func session_ping(): ## Pings an active session. [br][br]Request type is "/sessions/ping/"
+func session_ping(): ## Pings an active session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/ping/"
 	_call_gj_api('/sessions/ping/')
 
-func session_close(): ## Closes the active session. [br][br]Request type is "/sessions/close/"
+func session_close(): ## Closes the active session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/close/"
 	_call_gj_api('/sessions/close/')
 
-func session_check(): ## Checks for an active session. [br][br]Request type is "/sessions/check/"
+func session_check(): ## Checks for an active session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/check/"
 	_call_gj_api('/sessions/check/')
 #endregion
 
 #region SCORES
 ## Fetches a list of scores for cached user, a [param guest] or [param global]ly.[br]Leave [param guest] empty if you want global or cached user. [br][br]Request type is "/scores/"
-func scores_fetch(global=false, guest: String = "", limit=null, table_id=null, better_than=null, worse_than=null) -> void:
+func scores_fetch(global=false, guest: String = "", limit:int=10, table_id=null, better_than=null, worse_than=null) -> void:
 	var parameters = {limit = limit, table_id = table_id, better_than = better_than, worse_than = worse_than}
 	if !guest.is_empty(): parameters["guest"] = guest
-	_call_gj_api('/scores/', parameters, [], !global && guest.is_empty())
+	_call_gj_api('/scores/', parameters, [], !global and guest.is_empty())
 
 ## Attempts to add a score to the cached user or guest.[br]Leave [param guest] empty to use the cached user ([/i]User must be authenticated[/i]).
 func scores_add(score_string, sort_number, guest: String = "", table_id=null) -> void:
 	var parameters = {score = score_string, sort = sort_number, table_id = table_id}
 	if !guest.is_empty(): parameters["guest"] = guest
 	# Attempt call
-	if ((parameters["username"] && parameters["user_token"])\
-		|| parameters["guest"]):
+	if parameters["guest"] or (parameters["username"] and parameters["user_token"]):
 			_call_gj_api('/scores/add/', parameters, [], guest.is_empty())
 
 func scores_fetch_rank(sort, table_id=null) -> void: ## Returns the rank of a score on a table. [br][br]Request type is "/scores/get-rank/"
 	_call_gj_api('/scores/get-rank/', {sort = sort, table_id = table_id})
 
-func scores_fetch_tables() -> void: ## Fetches a list of high-score tables. [br][br]Request type is "/scores/tables/"
+func scores_fetch_tables() -> void: ## Fetches a list of high-score tables (scoreboards). [br][br]Request type is "/scores/tables/"
 	_call_gj_api('/scores/tables/',{})
 #endregion
 
@@ -226,47 +241,39 @@ func trophy_fetch(trophy_ids: String, achieved: String = '') -> void:
 	if _username_cache != null: _call_gj_api('/trophies/',
 		{achieved = achieved, trophy_id = trophy_ids})
 
-## Unlocks the trophy with id [param trophy_id] for the authenticated user. [i]User must be authenticated[/i] [br][br]Request type is "/trophies/remove-achieved/"
-func trophy_add_achieved(trophy_id) -> void:
+## Unlocks the trophy with id [param trophy_id] for the authenticated user. [param trophy_id] Can be [String] or [int]. [i]User must be authenticated[/i] [br][br]Request type is "/trophies/remove-achieved/"
+func trophy_add_achieved(trophy_id: String) -> void:
 	if _username_cache != null: _call_gj_api('/trophies/add-achieved/',
 		{trophy_id = trophy_id})
 
-## Removes the trophy with id [param trophy_id] from the authenticated user. [i]User must be authenticated[/i][br][b]NOTE[/b]: Only for debugging. [br][br]Request type is "/trophies/remove-achieved/"
-func trophy_remove_achieved(trophy_id) -> void:
+## Removes the trophy with id [param trophy_id] from the authenticated user. [param trophy_id] Can be [String] or [int]. [i]User must be authenticated[/i][br][b]NOTE[/b]: Only for debugging. [br][br]Request type is "/trophies/remove-achieved/"
+func trophy_remove_achieved(trophy_id: String) -> void:
 	if _username_cache != null: _call_gj_api('/trophies/remove-achieved/',
 		{trophy_id = trophy_id})
 #endregion
 
 #region DATA STORE
-func data_fetch(key, global=true):
-	if global:
-		_call_gj_api('/data-store/', {username = null, user_token = null, key = key})
-	else:
-		_call_gj_api('/data-store/', {key = key})
+## Fetches data from the key of the user or of global.[br][br]Request type is "/data-store/".
+func data_fetch(key: String, global:bool=true) -> void:
+	_call_gj_api('/data-store/', {key = key}, [], !global)
 
-func data_set(key, data, global=true):
-	if global:
-		_call_gj_api('/data-store/set/', {username = null, user_token = null, key = key, data = data})
-	else:
-		_call_gj_api('/data-store/set/', {key = key, data = data})
+## Stores data in the cloud of the user or of global.[br][br]Request type is "/data-store/set/".[br][br]
+## If [param global] is true, this is a global key. If false, it will use the cached user.
+func data_set(key: String, data: String, global:bool=true) -> void:
+		_call_gj_api('/data-store/set/', {key = key, data = data}, [], !global)
 
-func data_update(key, operation, value, global=true):
-	if global:
-		_call_gj_api('/data-store/update/',
-			{username = null, user_token = null, key = key, operation = operation, value = value})
-	else:
-		_call_gj_api('/data-store/update/',
-			{key = key, operation = operation, value = value})
+## Updates data in the [param key] of the user or of global using an operation.[br][br]Request type is "/data-store/update/".[br][br]
+## [param operation] can be "append", "prepend", "divide", "multiply", "add", or "subtract".[br]
+## For example: [code]data_update("login_count", "add", 1, false)[/code] will increase the cached user's "login_count" key by 1.
+func data_update(key: String, operation: String, value: Variant, global:bool=true) -> void:
+	_call_gj_api('/data-store/update/', {key = key, operation = operation, value = value}, [], !global)
 
-func data_remove(key, global=true):
-	if global:
-		_call_gj_api('/data-store/remove/', {username = null, user_token = null, key = key})
-	else:
-		_call_gj_api('/data-store/remove/', {key = key})
+## Removes the [param key] of the user or of global.[br][br]Request type is "/data-store/remove/".
+func data_remove(key: String, global:bool=true) -> void:
+	_call_gj_api('/data-store/remove/', {key = key}, [], !global)
 
-func data_fetch_keys(pattern=null, global=true):
-	if global:
-		_call_gj_api('/data-store/get-keys/', {username = null, user_token = null, pattern = pattern})
-	else:
-		_call_gj_api('/data-store/get-keys/', {pattern = pattern})
+## Fetches all the keys of either a user's or the global's cloud.[br][br]Request type is "/data-store/get-keys/".[br][br]
+## Setting the pattern will only fetch keys with applicable key names.
+func data_fetch_keys(pattern=null, global:bool=true) -> void:
+	_call_gj_api('/data-store/get-keys/', {pattern = pattern}, [], !global)
 #endregion
