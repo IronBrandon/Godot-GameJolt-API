@@ -5,7 +5,7 @@ Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj
 
 ## Introduction
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0-rc`
 
 ### Features
 
@@ -15,6 +15,12 @@ Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj
 - Refactored to fit with Godot 4(_.3_)+
 
 ### Installation
+
+**Release**
+
+Choose one of the official releases and follow its *Installation* instructions.
+
+**Source**
 
 1. Click "Code" and then "Download ZIP".
 2. Drag and drop the "Godot-GameJolt-API" folder into your project's addons folder.
@@ -50,7 +56,7 @@ Now you can call GameJoltAPI methods through a parent node or an extended script
 
 ### Authenticating Users
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0-rc`
 
 If your game is going to be distributed as a Web build on GameJolt, you can execute the method `user_auto_auth()`
 which will retrieve the player's username and token via the URL.\
@@ -96,7 +102,7 @@ func _on_gamejolt_request_completed(request_type, response) -> void:
 
 ### Unlocking Trophies
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0-rc`
 
 _Be sure to read the [Authenticating Users](#authenticating-users) tutorial before this one._
 
@@ -133,7 +139,7 @@ can debug it by reading the given error.
 
 ### Fetching Any Data
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0-rc`
 
 _Be sure to read the [Authenticating Users](#authenticating-users) tutorial before this one._
 

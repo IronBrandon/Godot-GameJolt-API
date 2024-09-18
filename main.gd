@@ -107,7 +107,7 @@ func _call_gj_api(type: String, parameters: Dictionary = {}, sub_types: Array = 
 	request_error = request(url)
 	if request_error != OK:
 		_busy = false
-	pass
+	return
 
 func _compose_param(parameter, key: String) -> String:
 	parameter = str(parameter)
@@ -184,12 +184,12 @@ func user_auto_auth() -> void:
 		tmp = JavaScriptBridge.eval('urlParams.get("gjapi_token")', true)
 		if tmp is String:
 			_user_token_cache = tmp
-			_call_gj_api('/users/auth/')
+			_call_gj_api('/users/auth/', {}, [], true)
 
 ## Attempts to authenticate a user with the given [param username] and [param token].[br][b]NOTE[/b]: The username and token cache are updated here, not after authentication.[br][br]Request type is "/users/auth/".
 func user_auth(username: String, token: String) -> void:
 	_username_cache = username; _user_token_cache = token;
-	_call_gj_api('/users/auth/')
+	_call_gj_api('/users/auth/', {}, [], true)
 
 func user_fetch(username: String, id: int = 0) -> void: ## Fetches the info of the [param username] or user [param id] data.[br][br]Request type is "/users/"
 	_call_gj_api('/users/', {username = username, user_id = id})
@@ -225,7 +225,7 @@ func scores_add(score_string, sort_number, guest: String = "", table_id=null) ->
 	if !guest.is_empty(): parameters["guest"] = guest
 	# Attempt call
 	if parameters["guest"] or (parameters["username"] and parameters["user_token"]):
-			_call_gj_api('/scores/add/', parameters, [], guest.is_empty())
+		_call_gj_api('/scores/add/', parameters, [], guest.is_empty())
 
 func scores_fetch_rank(sort, table_id=null) -> void: ## Returns the rank of a score on a table. [br][br]Request type is "/scores/get-rank/"
 	_call_gj_api('/scores/get-rank/', {sort = sort, table_id = table_id})
@@ -260,7 +260,7 @@ func data_fetch(key: String, global:bool=true) -> void:
 ## Stores data in the cloud of the user or of global.[br][br]Request type is "/data-store/set/".[br][br]
 ## If [param global] is true, this is a global key. If false, it will use the cached user.
 func data_set(key: String, data: String, global:bool=true) -> void:
-		_call_gj_api('/data-store/set/', {key = key, data = data}, [], !global)
+	_call_gj_api('/data-store/set/', {key = key, data = data}, [], !global)
 
 ## Updates data in the [param key] of the user or of global using an operation.[br][br]Request type is "/data-store/update/".[br][br]
 ## [param operation] can be "append", "prepend", "divide", "multiply", "add", or "subtract".[br]
