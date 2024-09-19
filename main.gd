@@ -4,10 +4,10 @@ class_name GameJoltAPI extends HTTPRequest
 # | Credits |
 	# Original Godot GJ API created by Ackens
 	# Forked from Deakcor's Godot GJ API
-	# : https://github.com/deakcor/-godot-gj-api
+	# > https://github.com/deakcor/-godot-gj-api
 	#
 	# Ported to Godot 4.x by IrønBrandon
-	# : https://github.com/IronBrandon/Godot-GameJolt-API/
+	# > https://github.com/IronBrandon/Godot-GameJolt-API/
 
 # NOTE: Please view the cleaner documentation by pressing F1 and typing 'GameJoltAPI'
 # or right-click "GameJoltAPI" in the node's inspector and select "Open Documentation".
@@ -83,14 +83,12 @@ func _ready() -> void:
 	if auto_auth_in_ready:
 		user_auto_auth()
 
-func _call_gj_api(type: String, parameters: Dictionary = {}, sub_types: Array = [], include_user: bool = true) -> void:
-	var request_error: Error = OK
+func _call_gj_api(type: String, parameters: Dictionary = {}, sub_types: Array = [], include_user: bool = true) -> Error:
 	if include_user:
 		parameters["username"] = parameters.get("username", _username_cache)
 		parameters["user_token"] = parameters.get("user_token", _user_token_cache)
 	else: parameters.erase("username"); parameters.erase("user_token")
 	if _busy:
-		request_error = ERR_BUSY
 		if auto_batch and type != '/batch/':
 			var url: String = _compose_url(type, parameters, true)
 			if queue.is_empty() or queue.back().type != '/batch/' or queue.back().sub_types.size()>=50:
@@ -100,14 +98,15 @@ func _call_gj_api(type: String, parameters: Dictionary = {}, sub_types: Array = 
 				queue.back().sub_types.push_back(type)
 		else:
 			queue.push_back(Request.new(type,parameters,sub_types))
-		return
+		return ERR_BUSY
 	_busy = true
 	var url: String = _compose_url(type, parameters)
 	current_request = Request.new(type,parameters,sub_types)
-	request_error = request(url)
-	if request_error != OK:
+	var err = request(url)
+	if err != OK:
 		_busy = false
-	return
+		return err
+	return OK
 
 func _compose_param(parameter, key: String) -> String:
 	parameter = str(parameter)
