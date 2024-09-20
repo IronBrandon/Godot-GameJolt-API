@@ -182,11 +182,11 @@ func _on_gamejolt_request_completed(request_type, response) -> void:
 				print("Score Fetch Failed! Error: ", response['message'])
 ```
 
-Here's an example using the official GameJolt Docs' examples:
+Here's an example output:
 
 `User nilllzz's Best Score: 234 Coins`
 
-If you replace \[0]['score'] with \[0]['sort'] it will print out the integer value of the score instead (_you get `234` as an int instead of `"234 Coins"` as a String_)
+If you replace [0]['score'] with [0]['sort'] it will print out the integer value of the score instead (_you get `234` as an int instead of `"234 Coins"` as a String_)
 
 - - -
 
