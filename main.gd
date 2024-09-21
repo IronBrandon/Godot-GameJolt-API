@@ -177,17 +177,18 @@ func batch_request(requests:Array[Request], parallel:bool=false, break_on_error:
 	_call_gj_api('/batch/',{requests = requests, parallel = parallel, break_on_error = break_on_error}, sub_types)
 
 #region USERS
-## Attempts to automatically authenticate the user with the URL in Web exports.
-## [br]When debugging, you can add this to the URL: [codeblock lang=text]?gjapi_username=<yourusername>&gjapi_token=<yourtoken>[/codeblock] Request type is "/users/auth/".
+## Attempts to automatically authenticate the user with the URL of Web builds. Does nothing in regular builds.
+## [br]When debugging, you can add this to the URL: [codeblock lang=text]?gjapi_username=<yourusername>&gjapi_token=<yourtoken>[/codeblock] Request type is "/users/auth/"
 func user_auto_auth() -> void:
-	JavaScriptBridge.eval('var urlParams = new URLSearchParams(window.location.search);',true)
-	var tmp = JavaScriptBridge.eval('urlParams.get("gjapi_username")', true)
-	if tmp is String:
-		_username_cache = tmp
-		tmp = JavaScriptBridge.eval('urlParams.get("gjapi_token")', true)
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval('var urlParams = new URLSearchParams(window.location.search);',true)
+		var tmp = JavaScriptBridge.eval('urlParams.get("gjapi_username")', true)
 		if tmp is String:
-			_user_token_cache = tmp
-			_call_gj_api('/users/auth/')
+			_username_cache = tmp
+			tmp = JavaScriptBridge.eval('urlParams.get("gjapi_token")', true)
+			if tmp is String:
+				_user_token_cache = tmp
+				_call_gj_api('/users/auth/')
 
 ## Attempts to authenticate a user with the given [param username] and [param token].
 ## [br][b]NOTE[/b]: The username and token cache are updated here, not after authentication.
@@ -286,7 +287,7 @@ func data_update(key:String, operation:String, value:Variant, global:bool=true) 
 	_call_gj_api('/data-store/update/', {key = key, operation = operation, value = value}, [], !global)
 
 ## Removes the [param key] of the user or of global.[br][br]Request type is "/data-store/remove/".
-func data_remove(key: String, global:bool=true) -> void:
+func data_remove(key:String, global:bool=true) -> void:
 	_call_gj_api('/data-store/remove/', {key = key}, [], !global)
 
 ## Fetches all the keys of either a user's or the global's cloud.[br]Setting the pattern will only fetch keys with applicable key names.
