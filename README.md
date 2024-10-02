@@ -1,5 +1,7 @@
-# A simple GameJolt API plugin for Godot 4.
-<img style="display: block; margin: auto;" src="gj_icon.png"/>
+# Godot GameJolt API
+<p align="center"><img src="gj_icon.png" width="180" alt="GameJolt API icon"></p>
+
+A simple GameJolt API plugin for Godot 4.
 
 - - -
 
