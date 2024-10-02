@@ -11,17 +11,14 @@ class_name GameJoltAPI extends HTTPRequest
 
 # NOTE: Please view the cleaner documentation by pressing F1 and typing 'GameJoltAPI'
 # or right-click "GameJoltAPI" in the node's inspector and select "Open Documentation".
-# If you don't see the GameJoltAPI as its own class, save and reload your project.
+# If you don't see the GameJoltAPI as its own class, try changing a line of code
+# (add a space, line, etc.) then save it and the docs should appear.
 
 ## A simple GameJolt API node.
 ## 
 ## [b]Credits[/b]: Ackens, Piotr Rojewski, Deakcor, and IrønBrandon.[br][br]
-## 
-## Also look at the [GameJoltAPI.Request] class.[br][br]
-## 
 ## Any methods without a description are untested, if you find any issues please
 ## report them in the GitHub repository.[br][br]
-## 
 ## [url=https://github.com/IronBrandon/Godot-GameJolt-API/wiki]GitHub Wiki[/url][br]
 ## Look at the [url=https://gamejolt.com/game-api/doc]Official Game API Docs[/url] for more information
 ## 

@@ -1,7 +1,11 @@
-A simple GameJolt API plugin for Godot 4.\
-The same GameJolt API used in IrønBrandon's [Home Grown](https://ironbrandon.itch.io/homegrown) (_beta and full release_).
+# A simple GameJolt API plugin for Godot 4.
+<img style="display: block; margin: auto;" src="gj_icon.png"/>
+
+- - -
 
 Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj-api)
+
+The same GameJolt API used in IrønBrandon's [Home Grown](https://ironbrandon.itch.io/homegrown) (_beta and full release_).
 
 ## Introduction
 
