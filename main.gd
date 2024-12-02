@@ -38,8 +38,8 @@ const BASE_GAMEJOLT_API_URL = 'https://api.gamejolt.com/api/game/v1_2'
 @export var game_id: String ## Your game's ID. This is public, just look at your game's URL and copy the numbers.
 ## Optional path to a JSON file containing your game's private_key and game_id. Format:
 ## [codeblock]{"private_key":"<gamekey>","game_id":"<gameid>"}[/codeblock] Useful for open-source games, just add the file to your '.gitignore'.[br][br]
-## If you want to make it extra secure, you can also add a [param "trophies"] key with either an Array of trophy IDs.[br]
-## Look at [member detected_trophies] for more info.
+## If you want to make it extra secure, you can also add a [param "trophy_ids"] key with an Array of trophy IDs.[br]
+## Look at [member trophy_ids] for more info.
 @export_file("*.json") var data_path: String
 @export var auto_batch: bool = true ## Merge queued requests in one batch request.
 @export var auto_auth_in_ready: bool = false ## Automatically calls the [method user_auto_auth] method during ready.
@@ -49,7 +49,9 @@ const BASE_GAMEJOLT_API_URL = 'https://api.gamejolt.com/api/game/v1_2'
 var _username_cache: String
 var _user_token_cache: String
 var _busy: bool
-var trophy_ids: PackedInt32Array ## Contains trophies loaded from [member data_path].
+## Contains trophy ids loaded from [member data_path].[br]Put the below data inside your 'gamejolt.json'
+## [codeblock]"trophy_ids": [123456, 789012][/codeblock]
+var trophy_ids: PackedInt32Array 
 var queue: Array[Request] = [] ## The current queue of [param Request]s.
 var current_request: Request ## The currently active GameJolt request.
 
@@ -75,7 +77,7 @@ func _ready() -> void:
 			if data is Dictionary:
 				private_key = data.get("private_key", private_key)
 				game_id = data.get("game_id", game_id)
-				if data.has("trophies"): for trophy in data["trophies"]:
+				if data.has("trophy_ids"): for trophy in data["trophy_ids"]:
 					trophy_ids.append(trophy)
 		else: push_warning('[GAMEJOLT] Key Path should lead to a .json file with "private_key" and "game_id" as keys')
 	if auto_auth_in_ready:

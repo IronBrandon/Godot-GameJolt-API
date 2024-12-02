@@ -11,7 +11,7 @@ The same GameJolt API used in IrønBrandon's [Home Grown](https://ironbrandon.it
 
 ## Introduction
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.1`
 
 ### Features
 
@@ -33,9 +33,11 @@ Choose one of the official releases and follow its *Installation* instructions.
     - You do not need the files '.gitattributes' or 'README.md'. All the other files are required.
 3. Rename the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api" to follow Godot's naming conventions.
 4. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
-5. Lastly save your project and click **Project > Reload Current Project**.
+5. Lastly, go to 'main\.gd', add a line and save*, then remove it and save again, and click **Project > Reload Current Project**.
 
 And it's installed!
+
+**This properly loads the offline documentation*
 
 ## **How To Use**
 
@@ -58,11 +60,21 @@ Next, you have two options depending on whether your game is open-source.
 and set the export variable `key_path` to that JSON file's path, such as "res://gamejolt.json".\
 This is useful for open-source projects that you still want to have GameJolt API functionality, as you can now add that file to your repository's .gitignore and not have to worry about cheaters.
 
+Optionally, you can add a "trophy_ids" Array as a key:
+```json
+{
+	"private_key": "<your_private_key>",
+	"game_id": "<your_game_id>",
+	"trophy_ids": [123456, 789012]
+}
+```
+Which will be loaded into `trophy_ids` during runtime.
+
 Now you can call GameJoltAPI methods through a parent node or an extended script!
 
 ### Authenticating Users
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0`, `1.1`
 
 If your game is going to be distributed as a Web build on GameJolt, you can execute the method `user_auto_auth()`
 which will retrieve the player's username and token via the URL.\
@@ -108,7 +120,7 @@ func _on_gamejolt_request_completed(request_type, response) -> void:
 
 ### Unlocking Trophies
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0`, `1.1`
 
 _Be sure to read the [Authenticating Users](#authenticating-users) tutorial before this one._
 
@@ -145,7 +157,7 @@ can debug it by reading the given error.
 
 ### Fetching Any Data
 
-**Plugin Version**: `1.0`
+**Plugin Version**: `1.0`, `1.1`
 
 _Be sure to read the [Authenticating Users](#authenticating-users) tutorial before this one._
 
