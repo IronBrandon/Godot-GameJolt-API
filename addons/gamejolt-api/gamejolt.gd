@@ -1,4 +1,4 @@
-@icon("gj_icon.png")
+@icon("gamejolt_icon.png")
 class_name GameJoltAPI extends HTTPRequest
 
 # | Credits |
@@ -55,7 +55,7 @@ var trophy_ids: PackedInt32Array
 var queue: Array[Request] = [] ## The current queue of [param Request]s.
 var current_request: Request ## The currently active GameJolt request.
 
-## The class that handles all data for API calls.
+## The class that handles all data for GameJolt API calls.
 ## 
 ## To create a new [GameJoltAPI.Request] type [codeblock]GameJoltAPI.Request.new("/type/", {}, ["/sub/","/types/"])[/codeblock]
 class Request:
@@ -208,16 +208,16 @@ func user_friends_fetch() -> void:
 #endregion
 
 #region SESSIONS
-func session_open(): ## Opens a session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/open/"
+func session_open(): ## Opens a session ([i]User must be authenticated[/i]).[br][br]Request type is "/sessions/open/"
 	_call_gj_api('/sessions/open/')
 
-func session_ping(): ## Pings an active session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/ping/"
+func session_ping(): ## Pings an active session ([i]User must be authenticated[/i]).[br][br]Request type is "/sessions/ping/"
 	_call_gj_api('/sessions/ping/')
 
-func session_close(): ## Closes the active session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/close/"
+func session_close(): ## Closes the active session ([i]User must be authenticated[/i]).[br][br]Request type is "/sessions/close/"
 	_call_gj_api('/sessions/close/')
 
-func session_check(): ## Checks for an active session ([/i]User must be authenticated[/i]).[br][br]Request type is "/sessions/check/"
+func session_check(): ## Checks for an active session ([i]User must be authenticated[/i]).[br][br]Request type is "/sessions/check/"
 	_call_gj_api('/sessions/check/')
 #endregion
 
@@ -230,7 +230,7 @@ func scores_fetch(global=false, guest:String = "", limit:int=10, table_id=null, 
 	if !guest.is_empty(): parameters["guest"] = guest
 	_call_gj_api('/scores/', parameters, [], !global and guest.is_empty())
 
-## Attempts to add a score to the cached user or guest.[br]Leave [param guest] empty to use the cached user ([/i]User must be authenticated[/i]).
+## Attempts to add a score to the cached user or guest.[br]Leave [param guest] empty to use the cached user ([i]User must be authenticated[/i]).
 ## [br][br]Request type is "/scores/add/"
 func scores_add(score_string, sort_number, guest:String="", table_id=null) -> void:
 	_call_gj_api('/scores/add/',
