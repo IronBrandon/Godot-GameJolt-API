@@ -6,31 +6,30 @@ A simple GameJolt API plugin for Godot 4.
 
 Forked from Deakcor's [GameJolt API plugin](https://github.com/deakcor/-godot-gj-api)
 
-## Introduction
+Full license: [LICENSE](addons/gamejolt-api/LICENSE)
 
-**Plugin Version**: `1.2`
+## Introduction
 
 ### Features
 
 - Verbose mode with detailed comments
 - Full offline code documentation in the form of Godot's custom docs
 - Code regions to easily review the plugin's code
-- Refactored to fit with Godot 4.1+
+- Full support for Godot 4.1-4.6+ (_and continuously tested on future versions!_)
 
 ### Installation
 
-Installation work identically to other Godot addons.
+Installation is identical to other Godot addons.
 
-1. Download either the source or latest available release.
-2. Drag and drop the "Godot-GameJolt-API" folder into your project's addons folder.
+1. Download either "gamejolt_api" in the source or the latest release.
+2. Drag and drop the "gamejolt_api" folder into your project's addons folder.
     - You do not need the files '.gitattributes' or 'README.md'. All the other files are required.
 3. Rename the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api" to follow Godot's naming conventions.
-4. Next, go to **Project > Project Settings... > Plugins** and enable the "GameJolt API" plugin.
-5. Lastly, go to 'main\.gd', add a line and save*, then remove it and save again, and click **Project > Reload Current Project**.
+4. Next, go to _*Project > Project Settings... > Plugins*_ and enable the "GameJolt API" plugin.
+5. You can also go to 'main\.gd', add a line, save, then remove it and save again.
+    - This ensures that the "offline documentation" properly generates.
 
 And it's installed!
-
-_*This properly loads the offline documentation_
 
 ## **How To Use**
 
@@ -41,7 +40,7 @@ under an Autoload scene (_if you have multiple scenes_).
 
 Next, you have two options depending on whether your game is open-source.
 
-**Option A (_most games_)**: Set the export variables `private_key` and `game_id` to your game's private key and game ID.
+**Option A (_closed-source_)**: Set the export variables `private_key` and `game_id` to your game's private key and game ID.
 
 **Option B (_open-source_)**: Create a JSON file in your Resources with the contents:
 
@@ -53,9 +52,9 @@ Next, you have two options depending on whether your game is open-source.
 ```
 
 and set the export variable `key_path` to that JSON file's path, such as "res://gamejolt.json".\
-This is useful for open-source projects that you still want to have GameJolt API functionality, as you can now add that file to your repository's .gitignore and not have to worry about cheaters.
+This is useful for open-source projects that you still want to have GameJolt API functionality, as you can now add that file to your repository's .gitignore and it won't be as easy for people to snatch your private key.
 
-Optionally, you can add a "trophy_ids" Array as a key:
+You can also, optionally, add a "trophy_ids" Array as a key:
 
 ```json
 {
@@ -70,8 +69,6 @@ Which will be loaded into `trophy_ids` during runtime.
 Now you can call GameJoltAPI methods through a parent node or an extended script!
 
 ### Authenticating Users
-
-**Plugin Version**: `1.2`
 
 If your game is going to be distributed as a Web build on GameJolt, you can execute the method `user_auto_auth()`
 which will retrieve the player's username and token via the URL.\
@@ -117,8 +114,6 @@ func _on_gamejolt_request_completed(request_type, response) -> void:
 
 ### Unlocking Trophies
 
-**Plugin Version**: `1.2`
-
 _Be sure to read the [Authenticating Users](#authenticating-users) tutorial before this one._
 
 In the method `GameJoltAPI.gamejolt_request_completed` is connected to, add '/trophies/add-achieved/'
@@ -153,8 +148,6 @@ If it was a success, it should print out "Trophy Achieved!". If you receive "Ach
 can debug it by reading the given error.
 
 ### Fetching Any Data
-
-**Plugin Version**: `1.2`
 
 _Be sure to read the [Authenticating Users](#authenticating-users) tutorial before this one._
 
