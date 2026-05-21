@@ -23,10 +23,8 @@ Installation is identical to other Godot addons.
 
 1. Download either "gamejolt_api" in the source or the latest release.
 2. Drag and drop the "gamejolt_api" folder into your project's addons folder.
-    - You do not need the files '.gitattributes' or 'README.md'. All the other files are required.
-3. Rename the plugin's folder from "Godot-GameJolt-API" to "gamejolt_api" to follow Godot's naming conventions.
-4. Next, go to _*Project > Project Settings... > Plugins*_ and enable the "GameJolt API" plugin.
-5. You can also go to 'main\.gd', add a line, save, then remove it and save again.
+3. Next, go to _*Project > Project Settings... > Plugins*_ and enable the "GameJolt API" plugin.
+4. You can also go to 'main\.gd', add a line, save, then remove it and save again.
     - This ensures that the "offline documentation" properly generates.
 
 And it's installed!
