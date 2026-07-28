@@ -10,11 +10,8 @@ Download from [Godot Asset Library](https://godotengine.org/asset-library/asset/
 
 ## Features
 
-- Full GameJolt Game API 1.2 support
-- Verbose mode with detailed comments
-- Full offline code documentation in the form of Godot's custom docs
-- Code regions to easily review the plugin's code
-- Full support for Godot 4.1-4.6+ (_and continuously tested on future versions!_)
+- Offline code documentation in the form of Godot's custom docs
+- Support for Godot 4.1-4.6+ (_and continuously tested on future versions!_)
 
 ## Installation
 
